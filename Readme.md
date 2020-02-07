@@ -1,7 +1,7 @@
 # Учебный проект «Код и Магия» [![Build status][travis-image]][travis-url]
 
 * Студент: [Дмитрий Волгушев](https://up.htmlacademy.ru/javascript/19/user/45546).
-* Наставник: `Неизвестно`.
+* Наставник: [Виталий Усик].
 
 ---
 
