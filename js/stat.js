@@ -13,6 +13,9 @@ var chartBottomAlignOffset = CLOUD_Y + CLOUD_HEIGHT - 1 * XY_GAP - FONT_GAP;
 
 var barLeftOffset;
 var barHeight;
+var numPlayers;
+var chartLeftOffset;
+var maxTime;
 
 
 function createCloud(ctx, x, y, color) {
@@ -32,26 +35,16 @@ var getMaxElement = function (arr) {
   return maxElement;
 };
 
-
-window.renderStatistics = function (ctx, names, times) {
-
-  var numPlayers = names.length;
-  var chartLeftOffset = (CLOUD_WIDTH - (numPlayers * BAR_WIDTH + (numPlayers - 1) * BAR_GAP)) / 2;
-
-  createCloud(ctx, CLOUD_X + XY_GAP, CLOUD_Y + XY_GAP, 'rgba(0, 0, 0, 0.7)');
-  createCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
-
+function renderTitle(ctx) {
   ctx.fillStyle = '#000';
   ctx.font = '16px PT Mono';
   ctx.textAlign = 'left';
   ctx.textBaseline = 'hanging';
   ctx.fillText('Ура вы победили!', CLOUD_X + XY_GAP, CLOUD_Y + 3 * XY_GAP);
   ctx.fillText('Список результатов:', CLOUD_X + XY_GAP, CLOUD_Y + 3 * XY_GAP + FONT_GAP);
+}
 
-
-  var maxTime = getMaxElement(times);
-
-  ctx.textAlign = 'center';
+function renderCharts(ctx, names, times) {
   for (var i = 0; i < numPlayers; i++) {
 
     barLeftOffset = CLOUD_X + chartLeftOffset + i * (BAR_GAP + BAR_WIDTH);
@@ -69,4 +62,22 @@ window.renderStatistics = function (ctx, names, times) {
 
     ctx.fillRect(barLeftOffset, chartBottomAlignOffset - XY_GAP - barHeight, BAR_WIDTH, barHeight);
   }
+}
+
+
+window.renderStatistics = function (ctx, names, times) {
+
+  numPlayers = names.length;
+  chartLeftOffset = (CLOUD_WIDTH - (numPlayers * BAR_WIDTH + (numPlayers - 1) * BAR_GAP)) / 2;
+
+  createCloud(ctx, CLOUD_X + XY_GAP, CLOUD_Y + XY_GAP, 'rgba(0, 0, 0, 0.7)');
+  createCloud(ctx, CLOUD_X, CLOUD_Y, '#fff');
+
+  renderTitle(ctx);
+
+  maxTime = getMaxElement(times);
+
+  ctx.textAlign = 'center';
+
+  renderCharts(ctx, names, times);
 };
