@@ -23,7 +23,7 @@ function createCloud(ctx, x, y, color) {
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
 }
 
-var getMaxElement = function (arr) {
+function getMaxElement(arr) {
   var maxElement = arr[0];
 
   for (var i = 1; i < arr.length; i++) {
@@ -33,7 +33,7 @@ var getMaxElement = function (arr) {
   }
 
   return maxElement;
-};
+}
 
 function renderTitle(ctx) {
   ctx.fillStyle = '#000';
