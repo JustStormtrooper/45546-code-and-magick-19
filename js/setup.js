@@ -6,23 +6,25 @@ var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var NUM_PERSONS = 4;
 
-var wizardSetup = document.querySelector('.setup');
-wizardSetup.classList.remove('hidden');
-
 var setupSimilarElement = document.querySelector('.setup-similar-list');
-
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
-
 var fragment = document.createDocumentFragment();
-
 var persons = [];
 
-function generatePerson(person) {
+document.querySelector('.setup').classList.remove('hidden');
 
-  person.name = PERSON_FIRST_NAMES[Math.floor(Math.random() * PERSON_FIRST_NAMES.length)] + ' ' +
-                PERSON_SECOND_NAMES[Math.round(Math.random() * PERSON_SECOND_NAMES.length)];
-  person.coatColor = COAT_COLORS[Math.floor(Math.random() * COAT_COLORS.length)];
-  person.eyesColor = EYES_COLORS[Math.floor(Math.random() * EYES_COLORS.length)];
+function generatePersons() {
+
+  for (var i = 0; i < NUM_PERSONS; i++) {
+    var person = {};
+
+    person.name = PERSON_FIRST_NAMES[Math.floor(Math.random() * PERSON_FIRST_NAMES.length)] + ' ' +
+                  PERSON_SECOND_NAMES[Math.round(Math.random() * PERSON_SECOND_NAMES.length)];
+    person.coatColor = COAT_COLORS[Math.floor(Math.random() * COAT_COLORS.length)];
+    person.eyesColor = EYES_COLORS[Math.floor(Math.random() * EYES_COLORS.length)];
+
+    persons[persons.length] = person;
+  }
 
   return person;
 
@@ -40,15 +42,16 @@ function renderPerson(person) {
 
 }
 
-for (var i = 0; i < NUM_PERSONS; i++) {
-  var person = {};
-  persons[i] = generatePerson(person);
-  fragment.appendChild(renderPerson(persons[i]));
+function addPersonsToDOM() {
+
+  for (var i = 0; i < NUM_PERSONS; i++) {
+    fragment.appendChild(renderPerson(persons[i]));
+  }
+
+  setupSimilarElement.appendChild(fragment);
 }
 
-setupSimilarElement.appendChild(fragment);
+generatePersons();
+addPersonsToDOM();
 
 document.querySelector('.setup-similar').classList.remove('hidden');
-
-console.log(persons);
-
