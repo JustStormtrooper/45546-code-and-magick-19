@@ -7,9 +7,11 @@ var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
 var NUM_PERSONS = 4;
 
-var currentCoatColorIndex = 0;
-var currentEyesColorIndex = 0;
-var currentFireballColorIndex = 0;
+var wizardColorState = {
+  currentCoatColorIndex: 0,
+  currentEyesColorIndex: 0,
+  currentFireballColorIndex: 0,
+};
 
 var setupSimilarElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
@@ -43,10 +45,9 @@ function generatePersons() {
   for (var i = 0; i < NUM_PERSONS; i++) {
     var person = {};
 
-    person.name = PERSON_FIRST_NAMES[Math.floor(Math.random() * PERSON_FIRST_NAMES.length)] + ' ' +
-                  PERSON_SECOND_NAMES[Math.floor(Math.random() * PERSON_SECOND_NAMES.length)];
-    person.coatColor = COAT_COLORS[Math.floor(Math.random() * COAT_COLORS.length)];
-    person.eyesColor = getRandomItem(EYES_COLORS)[1];
+    person.name = getRandomItem(PERSON_FIRST_NAMES) + ' ' + getRandomItem(PERSON_SECOND_NAMES);
+    person.coatColor = getRandomItem(COAT_COLORS);
+    person.eyesColor = getRandomItem(EYES_COLORS);
 
     persons.push(person);
   }
@@ -87,12 +88,13 @@ function init() {
 
 function getRandomItem(array) {
   var randomItemIndex = Math.floor(Math.random() * array.length);
-  return [randomItemIndex, array[randomItemIndex]];
+  return array[randomItemIndex];
 }
 
-function getNextItem(array, currentItemIndex) {
-  var nextItemIndex = ++currentItemIndex % array.length;
-  return [nextItemIndex, array[nextItemIndex]];
+function getNextItem(array, wizardState, wizardStateItem) {
+  var nextItemIndex = ++wizardState[wizardStateItem] % array.length;
+  wizardState[wizardStateItem] = nextItemIndex;
+  return array[nextItemIndex];
 }
 
 setupOpenElement.addEventListener('click', function () {
@@ -116,24 +118,21 @@ setupCloseElement.addEventListener('keydown', function (evt) {
 });
 
 wizardCoatElement.addEventListener('click', function () {
-  var values = getNextItem(COAT_COLORS, currentCoatColorIndex);
-  currentCoatColorIndex = values[0];
-  wizardCoatElement.style.fill = values[1];
-  setupElement.querySelector('input[name=coat-color]').value = values[1];
+  var colorValue = getNextItem(COAT_COLORS, wizardColorState, 'currentCoatColorIndex');
+  wizardCoatElement.style.fill = colorValue;
+  setupElement.querySelector('input[name=coat-color]').value = colorValue;
 });
 
 wizardEyesElement.addEventListener('click', function () {
-  var values = getNextItem(EYES_COLORS, currentEyesColorIndex);
-  currentEyesColorIndex = values[0];
-  wizardEyesElement.style.fill = values[1];
-  setupElement.querySelector('input[name=eyes-color]').value = values[1];
+  var colorValue = getNextItem(EYES_COLORS, wizardColorState, 'currentEyesColorIndex');
+  wizardEyesElement.style.fill = colorValue;
+  setupElement.querySelector('input[name=eyes-color]').value = colorValue;
 });
 
 wizardFireballElement.addEventListener('click', function () {
-  var values = getNextItem(FIREBALL_COLORS, currentFireballColorIndex);
-  currentFireballColorIndex = values[0];
-  wizardFireballElement.style.background = values[1];
-  wizardFireballElement.querySelector('input[name=fireball-color]').value = values[1];
+  var colorValue = getNextItem(FIREBALL_COLORS, wizardColorState, 'currentFireballColorIndex');
+  wizardFireballElement.style.background = colorValue;
+  wizardFireballElement.querySelector('input[name=fireball-color]').value = colorValue;
 });
 
 init();
