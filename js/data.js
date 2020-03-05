@@ -33,7 +33,7 @@
   }
 
   function showSimilarSetup() {
-    window.backend.load(addPersonsToDOM, window.backend.showErrorMessage);
+    window.backend.load(addPersonsToDOM);
     setupSimilarElement.classList.remove('hidden');
   }
 

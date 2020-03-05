@@ -20,6 +20,10 @@
     document.removeEventListener('keydown', onPopupEscPress);
     setupElement.style.left = SETUP_LEFT_DEFAULT;
     setupElement.style.top = SETUP_TOP_DEFAULT;
+    var errorElement = document.querySelector('.setup-similar-list + div');
+    if (errorElement !== null) {
+      errorElement.parentNode.removeChild(errorElement);
+    }
   }
 
   function onPopupEscPress(evt) {
@@ -49,7 +53,7 @@
   });
 
   formElement.addEventListener('submit', function (evt) {
-    window.backend.save(new FormData(formElement), closeSetup, window.backend.showErrorMessage);
+    window.backend.save(new FormData(formElement), closeSetup);
     evt.preventDefault();
   });
 

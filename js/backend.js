@@ -4,51 +4,23 @@
   var URL_LOAD = 'https://js.dump.academy/code-and-magick/data';
   var URL_SAVE = 'https://js.dump.academy/code-and-magick';
 
-  function load(onLoad, onError) {
+  function load(onLoad) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.timeout = 10000;
 
-    xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onLoad(xhr.response);
-      } else {
-        onError('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText + '(URL: ' + xhr.responseURL + ')');
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения.');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      onError('Превышено время ожидания ответа от сервера.');
-    });
+    addListeners(xhr, onLoad);
 
     xhr.open('GET', URL_LOAD);
     xhr.send();
   }
 
-  function save(data, onLoad, onError) {
+  function save(data, onLoad) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.timeout = 10000;
 
-    xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
-        onLoad();
-      } else {
-        onError('Данные не отправлены. Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText + '(URL: ' + xhr.responseURL + ')');
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения.');
-    });
-
-    xhr.addEventListener('timeout', function () {
-      onError('Превышено время ожидания данных сервером.');
-    });
+    addListeners(xhr, onLoad);
 
     xhr.open('POST', URL_SAVE);
     xhr.send(data);
@@ -73,10 +45,27 @@
     document.querySelector('.setup-similar-list').insertAdjacentElement('afterend', node);
   }
 
+  function addListeners(xhr, onLoad) {
+    xhr.addEventListener('load', function () {
+      if (xhr.status === 200) {
+        onLoad(xhr.response);
+      } else {
+        showErrorMessage('Cтатус ответа: ' + xhr.status + ' ' + xhr.statusText + '(URL: ' + xhr.responseURL + ')');
+      }
+    });
+
+    xhr.addEventListener('error', function () {
+      showErrorMessage('Произошла ошибка соединения.');
+    });
+
+    xhr.addEventListener('timeout', function () {
+      showErrorMessage('Превышено время ожидания данных.');
+    });
+  }
+
   window.backend = {
     load: load,
-    save: save,
-    showErrorMessage: showErrorMessage
+    save: save
   };
 
 })();
