@@ -8,6 +8,7 @@
   var setupOpenElement = document.querySelector('.setup-open');
   var setupCloseElement = setupElement.querySelector('.setup-close');
   var dialogHandler = setupElement.querySelector('.upload');
+  var formElement = setupElement.querySelector('.setup-wizard-form');
 
   function showSetup() {
     setupElement.classList.remove('hidden');
@@ -19,6 +20,10 @@
     document.removeEventListener('keydown', onPopupEscPress);
     setupElement.style.left = SETUP_LEFT_DEFAULT;
     setupElement.style.top = SETUP_TOP_DEFAULT;
+    var errorElement = document.querySelector('.setup-similar-list + div');
+    if (errorElement !== null) {
+      errorElement.parentNode.removeChild(errorElement);
+    }
   }
 
   function onPopupEscPress(evt) {
@@ -45,6 +50,11 @@
     if (evt.key === 'Enter') {
       closeSetup();
     }
+  });
+
+  formElement.addEventListener('submit', function (evt) {
+    window.backend.save(new FormData(formElement), closeSetup);
+    evt.preventDefault();
   });
 
   dialogHandler.addEventListener('mousedown', function (evt) {
