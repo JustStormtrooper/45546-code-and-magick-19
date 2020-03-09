@@ -19,26 +19,21 @@
 
   function addPersonsToDOM(persons) {
     var fragment = document.createDocumentFragment();
-
+    setupSimilarListElement.innerHTML = '';
     for (var i = 0; i < NUM_PERSONS; i++) {
-      fragment.appendChild(renderPerson(getRandomItem(persons)));
+      fragment.appendChild(renderPerson(persons[i]));
     }
 
     setupSimilarListElement.appendChild(fragment);
   }
 
-  function getRandomItem(array) {
-    var randomItemIndex = Math.floor(Math.random() * array.length);
-    return array[randomItemIndex];
-  }
-
   function showSimilarSetup() {
-    window.backend.load(addPersonsToDOM);
     setupSimilarElement.classList.remove('hidden');
   }
 
   window.data = {
-    showSimilarSetup: showSimilarSetup
+    showSimilarSetup: showSimilarSetup,
+    addPersonsToDOM: addPersonsToDOM
   };
 
 })();
